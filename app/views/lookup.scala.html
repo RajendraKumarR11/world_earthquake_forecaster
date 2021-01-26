@@ -1,0 +1,82 @@
+@import helper._
+@(form: Form[LookupForm.LookupData], postUrl: Call)(implicit request: MessagesRequestHeader)
+@main("Lookup") {
+<section id="content">
+    <div class="wrapper">
+        <article>
+            <h2>Historical Lookup</h2>
+            <p>Provides a historical lookup of earthquakes around a specified point and within a date range.</p>
+            <p>
+            @helper.form(postUrl) {
+                <p style="font-size: 16px">
+                @helper.CSRF.formField
+                <style>
+                    .column {float: left;width: 33%;}
+                    .row:after {content: "";display: table;clear: both;}
+                </style>
+                <div class="row">
+                    <div class="column">
+                        @helper.inputText(
+                        form("latitude"),
+                        '_label -> "Latitude",
+                        'placeholder -> "-90 to 90",
+                        'class->"form-control",
+                        '_help -> "degrees",
+                        '_showErrors -> true)
+                    </div>
+                    <div class="column">
+                        @helper.inputText(
+                        form("longitude"),
+                        '_label -> "Longitude",
+                        'placeholder -> "-180 to 180",
+                        'class->"form-control",
+                        '_help -> "degrees",
+                        '_showErrors -> true)
+                    </div>
+                    <div class="column">
+                        @helper.inputText(
+                        form("radius"),
+                        '_label -> "Radius [km]",
+                        'placeholder -> "> 0",
+                        'class->"form-control",
+                        '_help -> "kilometers",
+                        '_showErrors -> true)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        @helper.inputDate(
+                        form("startDate"),
+                        '_label -> "Start Date",
+                        'placeholder -> "",
+                        'class->"form-control",
+                        '_help -> "MM/DD/YYYY",
+                        '_showErrors -> true)
+                    </div>
+                    <div class="column">
+                        @helper.inputDate(
+                        form("endDate"),
+                        '_label -> "End Date",
+                        'placeholder -> "",
+                        'class->"form-control",
+                        '_help -> "MM/DD/YYYY",
+                        '_showErrors -> true)
+                    </div>
+                </div>
+                </p>
+                <br>
+                <button style="font-size : 18px">Lookup</button>
+                }
+                @if(form.hasGlobalErrors) {
+                    @for(error <- form.globalErrors) {
+                        <p style="color:red">@error.format</p>
+                    }
+                }
+            </p>
+        </article>
+        <aside>
+            @commonSidebar()
+        </aside>
+    </div>
+</section>
+}

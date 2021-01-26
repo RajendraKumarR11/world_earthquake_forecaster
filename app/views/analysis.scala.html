@@ -1,0 +1,64 @@
+@import helper._
+@(form: Form[AnalysisForm.AnalysisData], postUrl: Call)(implicit request: MessagesRequestHeader)
+@main("Magnitude Linear Regression Analysis") {
+<section id="content">
+    <div class="wrapper">
+        <article>
+            <h2>Magnitude Linear Regression Analysis</h2>
+            <p>Estimate the magnitude of a possible earthquake at an user specified latitude, longitude and depth</p>
+            <p>
+                @helper.form(postUrl) {
+                <p style="font-size: 16px">
+                @helper.CSRF.formField
+                <style>
+                    .column {float: left;width: 33%;}
+                    .row:after {content: "";display: table;clear: both;}
+                </style>
+                <div class="row">
+                    <div class="column">
+                        @helper.inputText(
+                        form("latitude"),
+                        '_label -> "Latitude",
+                        'placeholder -> "-90 to 90",
+                        'class->"form-control",
+                        '_help -> "degrees",
+                        '_showErrors -> true)
+                    </div>
+                    <div class="column">
+                        @helper.inputText(
+                        form("longitude"),
+                        '_label -> "Longitude",
+                        'placeholder -> "-180 to 180",
+                        'class->"form-control",
+                        '_help -> "degrees",
+                        '_showErrors -> true)
+                    </div>
+                    <div class="column">
+                        @helper.inputText(
+                        form("depth"),
+                        '_label -> "Depth",
+                        'placeholder -> "0 to 700",
+                        'class->"form-control",
+                        '_help -> "kilometers (0 to 70 for Shallow; 70 to 300 for Intermediate; 300 to 700 for Deep)",
+                        '_showErrors -> true)
+                    </div>
+                    </div>
+                </p>
+                <br>
+                <button style="font-size : 18px">Analyze</button>
+                }
+                @if(form.hasGlobalErrors) {
+                    @for(error <- form.globalErrors) {
+                        <p style="color:red">@error.format</p>
+                    }
+                }
+                </p>
+                <p>Multiple Linear Regression makes use of the empirical relationship between variables ‘Latitude’, ‘Longitude’ and ‘Depth’ to predict the ‘magnitude’ of a possible earthquake at the given location based on historical world earthquake data of 11 years.</p>
+                <p>The predicted magnitude does not conform to a particular magnitude scale, as data pertaining to all officially USGS recognised scales have been taken into account.</p>
+        </article>
+        <aside>
+            @commonSidebar()
+        </aside>
+    </div>
+</section>
+}

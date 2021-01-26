@@ -1,0 +1,59 @@
+@import model.edu.neu.coe.csye7200.proj._
+@(data: Seq[USGeoSurvey])
+@main("Lookup Results") {
+<section id="top">
+    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAE2UpXjKKqvI86_mQ37Yak8xH8YisubWg"
+            type="text/javascript"></script>
+    <style type="text/css">
+      html, body, #map { height: 500px; width: 100%; margin: 0; }
+    </style>
+    <script type="text/javascript">
+    function initialize() {
+      var map = new google.maps.Map(
+        document.getElementById('map'), {
+          center: new google.maps.LatLng(@data.head.location.latitude,@data.head.location.longitude),
+          zoom: 6,
+          mapTypeId: google.maps.MapTypeId.TERRAIN
+      });
+      var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(@data.head.location.latitude,@data.head.location.longitude),
+            map: map,
+            draggable: false,
+            animation: google.maps.Animation.DROP,
+            title: '@data.head.location.place, @data.size earthquakes'
+      });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <div id="map"</div>
+</section>
+<section id="content">
+    <div class="wrapper">
+        <article>
+            <h2>Historical Lookup</h2>
+            <div>
+                <table>
+                    <tr><td><b><u>Date/time</u></b></td>
+                        <td><b><u>Location</u></b></td>
+                        <td><b><u>Latitude</u></b></td>
+                        <td><b><u>Longitude</u></b></td>
+                        <td><b><u>Magnitude</u></b></td></tr>
+                @for( u <- data ) {
+                <tr>
+                    <td>@u.datetime.toString()</td>
+                    <td>@u.location.place</td>
+                    <td>@u.location.latitude.toString()</td>
+                    <td>@u.location.longitude.toString()</td>
+                    <td>@u.magnitude.magnitude.toString() [@u.magnitude.units]</td>
+                </tr>
+                }
+                </table>
+            </div>
+        </article>
+        <aside>
+            @commonSidebar()
+        </aside>
+    </div>
+</section>
+
+}
